@@ -60,6 +60,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./storage:/app/storage:ro
+      - ./staticfiles:/app/staticfiles:ro
     healthcheck:
       test: ["CMD", "nginx", "-t"]
       interval: 30s
