@@ -1,0 +1,8 @@
+#+TITLE: {{ nick }}'s journal
+#+NICK: {{ nick }}
+#+DESCRIPTION:
+#+FOLLOW: https://org-social.org/social.org
+#+FOLLOW: https://andros.dev/static/social.org
+
+* Posts
+**
