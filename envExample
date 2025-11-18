@@ -1,0 +1,39 @@
+# Django Settings
+DJANGO_SETTINGS_MODULE=core.settings
+DEBUG=true
+SECRET_KEY=django-insecure-CHANGE-THIS-IN-PRODUCTION-y315h5v5t^1c^rqqcpk1y&!7+f8%8rj3$3bh2k!xoco8x@a+kr
+ALLOWED_HOSTS=localhost,127.0.0.1,django,nginx
+SITE_DOMAIN=localhost:8080
+
+# Redis Configuration
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_CACHE_DB=1
+
+# Huey Configuration
+HUEY_WORKERS=1
+
+# Nginx Configuration
+NGINX_PORT=8080
+
+# Host Configuration
+# Maximum file size in bytes (default: 5MB)
+MAX_FILE_SIZE=5242880
+# TTL for inactive files in days (default: 30)
+FILE_TTL_DAYS=30
+# Storage path for social.org files
+STORAGE_PATH=/app/storage
+
+# Database Configuration (if using PostgreSQL instead of SQLite)
+# DB_NAME=org_social_host
+# DB_USER=postgres
+# DB_PASSWORD=password
+# DB_HOST=postgres
+# DB_PORT=5432
+
+# Production Settings (uncomment for production)
+# DEBUG=false
+# SECRET_KEY=your-super-secret-production-key-here
+# ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+# SITE_DOMAIN=yourdomain.com

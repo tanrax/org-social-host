@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Org Social Host</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .hint {
+            color: #999;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        #result.show {
+            display: block;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .result-item {
+            margin-bottom: 12px;
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: #555;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            border: 1px solid #ddd;
+        }
+
+        .error-list {
+            list-style: none;
+        }
+
+        .error-list li {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .htmx-request button {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Signup - Org Social Host</h1>
+        <p class="subtitle">Register your nickname and get your vfile token to start hosting your social.org file</p>
+
+        <form hx-post="/signup"
+              hx-target="#result"
+              hx-swap="innerHTML"
+              hx-indicator="#loading"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+            <div class="form-group">
+                <label for="nick">Nickname</label>
+                <input
+                    type="text"
+                    id="nick"
+                    name="nick"
+                    placeholder="Enter your desired nickname"
+                    required
+                    pattern="[a-zA-Z0-9_-]{3,50}"
+                    minlength="3"
+                    maxlength="50">
+                <p class="hint">3-50 characters, only letters, numbers, hyphens and underscores</p>
+            </div>
+
+            <button type="submit">
+                Create Account
+                <span id="loading" class="loading htmx-indicator"></span>
+            </button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Handle HTMX response
+        document.body.addEventListener('htmx:afterRequest', function(event) {
+            const result = document.getElementById('result');
+            result.classList.add('show');
+
+            try {
+                const response = JSON.parse(event.detail.xhr.response);
+
+                if (response.type === 'Success') {
+                    result.className = 'success show';
+                    result.innerHTML = `
+                        <div class="result-title">✅ Account Created Successfully!</div>
+
+                        <div class="result-item">
+                            <div class="result-label">🔑 Your VFile Token:</div>
+                            <div class="result-value">${response.data.vfile}</div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-label">🌐 Public URL:</div>
+                            <div class="result-value">${response.data['public-url']}</div>
+                        </div>
+
+                        <p style="margin-top: 16px; font-size: 13px; color: #155724;">
+                            <strong>⚠️ Important:</strong> Save your vfile token securely. You'll need it to upload, update, or delete your file.
+                        </p>
+                    `;
+                } else if (response.type === 'Error') {
+                    result.className = 'error show';
+                    result.innerHTML = `
+                        <div class="result-title">❌ Error</div>
+                        <ul class="error-list">
+                            ${response.errors.map(err => `<li>${err}</li>`).join('')}
+                        </ul>
+                    `;
+                }
+            } catch (e) {
+                result.className = 'error show';
+                result.innerHTML = `
+                    <div class="result-title">❌ Error</div>
+                    <p>An unexpected error occurred. Please try again.</p>
+                `;
+            }
+        });
+
+        // Clear result when typing
+        document.getElementById('nick').addEventListener('input', function() {
+            const result = document.getElementById('result');
+            result.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
