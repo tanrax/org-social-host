@@ -31,6 +31,7 @@ STORAGE_PATH = os.environ.get("STORAGE_PATH", str(BASE_DIR / "storage"))
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
+    "django.contrib.staticfiles",
     "rest_framework",
     "django_filters",
     "huey.contrib.djhuey",
@@ -99,6 +100,12 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.2/howto/static-files/
+
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
