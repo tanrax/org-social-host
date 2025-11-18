@@ -30,8 +30,8 @@ Replace `my-nick` with your desired nickname.
 
 If the nickname is available, you will receive 2 elements that you must keep very safe:
 
-- `vfile`: a path that represents your `social.org` file in a unique and virtual way. You should not share it with anyone.
-- `public-url`: the public URL where your `social.org` file will be hosted. You can share this URL with anyone you want.
+- `vfile`: a path that represents your `social.org` file in a unique and virtual way. You should not share it with anyone. The format is usually like this: `https://host.org-social.org/vfile?token=123456789&ts=1700000000&sig=abc123`.
+- `public-url`: the public URL where your `social.org` file will be hosted. You can share this URL with anyone you want. The format is usually like this: `https://host.org-social.org/my-nick/social.org`.
 
 If you use the `org-social.el` client, you should configure it as follows:
 
