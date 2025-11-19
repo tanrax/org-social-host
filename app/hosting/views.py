@@ -58,6 +58,11 @@ def root_view(request):
                     "method": "POST",
                     "description": "Remove redirect and resume hosting",
                 },
+                "public-routes": {
+                    "href": "/public-routes",
+                    "method": "GET",
+                    "description": "List all public social.org files hosted on the server",
+                },
             },
         }
     )
@@ -518,6 +523,28 @@ def remove_redirect_view(request):
             "data": {
                 "message": "Redirect removed successfully",
             },
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(["GET"])
+def public_routes_view(request):
+    """List all public social.org files hosted on the server."""
+    # Get all hosted files that are not redirected and have content
+    hosted_files = HostedFile.objects.filter(
+        redirect_url__isnull=True,
+        file_content__isnull=False,
+    ).exclude(file_content="")
+
+    # Build list of public URLs
+    public_urls = [hosted_file.public_url for hosted_file in hosted_files]
+
+    return Response(
+        {
+            "type": "Success",
+            "errors": [],
+            "data": public_urls,
         },
         status=status.HTTP_200_OK,
     )

@@ -225,10 +225,43 @@ curl http://localhost:8080/
     "upload": {"href": "/upload", "method": "POST"},
     "delete": {"href": "/delete", "method": "POST"},
     "redirect": {"href": "/redirect", "method": "POST"},
-    "remove-redirect": {"href": "/remove-redirect", "method": "POST"}
+    "remove-redirect": {"href": "/remove-redirect", "method": "POST"},
+    "public-routes": {"href": "/public-routes", "method": "GET"}
   }
 }
 ```
+
+### Public Routes
+
+`/public-routes` - List all public social.org files hosted on the server.
+
+This endpoint allows you to discover other users' public files and explore the Org Social community on this instance.
+
+**Request:**
+
+```sh
+curl http://localhost:8080/public-routes
+```
+
+**Response:**
+
+```json
+{
+  "type": "Success",
+  "errors": [],
+  "data": [
+    "http://localhost:8080/alice/social.org",
+    "http://localhost:8080/bob/social.org",
+    "http://localhost:8080/charlie/social.org"
+  ]
+}
+```
+
+**Notes:**
+
+- Only active files (not redirected) are included in the list
+- Files without content are excluded
+- This endpoint is useful for discovering users and building community directories
 
 ### Signup
 

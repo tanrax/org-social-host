@@ -12,5 +12,6 @@ urlpatterns = [
     path("delete", views.delete_view, name="delete"),
     path("redirect", views.redirect_view, name="redirect"),
     path("remove-redirect", views.remove_redirect_view, name="remove-redirect"),
+    path("public-routes", views.public_routes_view, name="public-routes"),
     path("<str:nickname>/social.org", views.serve_file_view, name="serve-file"),
 ]
