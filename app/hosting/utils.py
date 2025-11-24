@@ -80,12 +80,16 @@ def build_vfile_url(token: str, timestamp: int, signature: str, request=None) ->
     Returns:
         Complete vfile URL
     """
-    # Detect scheme from request if available
-    if request:
-        scheme = "https" if request.is_secure() else "http"
+    # Detect scheme:
+    # 1. If request is secure (X-Forwarded-Proto: https), use https
+    # 2. If SITE_DOMAIN is not localhost, assume https (production)
+    # 3. Otherwise use http (development)
+    if request and request.is_secure():
+        scheme = "https"
+    elif not settings.SITE_DOMAIN.startswith("localhost"):
+        scheme = "https"
     else:
-        # Fallback: check if SITE_DOMAIN suggests https
-        scheme = "https" if not settings.SITE_DOMAIN.startswith("localhost") else "http"
+        scheme = "http"
 
     base_url = f"{scheme}://{settings.SITE_DOMAIN}/vfile"
     params = {
