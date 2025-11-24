@@ -120,6 +120,7 @@ def signup_view(request):
         token_data["token"],
         token_data["timestamp"],
         token_data["signature"],
+        request,
     )
 
     # Generate default content from template
@@ -145,7 +146,7 @@ def signup_view(request):
             "errors": [],
             "data": {
                 "vfile": vfile_url,
-                "public-url": hosted_file.public_url,
+                "public-url": hosted_file.get_public_url(request),
             },
         },
         status=status.HTTP_200_OK,
@@ -254,7 +255,7 @@ def upload_view(request):
             "errors": [],
             "data": {
                 "message": "File uploaded successfully",
-                "public-url": hosted_file.public_url,
+                "public-url": hosted_file.get_public_url(request),
             },
         },
         status=status.HTTP_200_OK,
@@ -538,7 +539,7 @@ def public_routes_view(request):
     ).exclude(file_content="")
 
     # Build list of public URLs
-    public_urls = [hosted_file.public_url for hosted_file in hosted_files]
+    public_urls = [hosted_file.get_public_url(request) for hosted_file in hosted_files]
 
     return Response(
         {

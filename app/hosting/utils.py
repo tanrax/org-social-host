@@ -67,7 +67,7 @@ def verify_vfile_token(token: str, timestamp: int, signature: str, nickname: str
     return hmac.compare_digest(signature, expected_signature)
 
 
-def build_vfile_url(token: str, timestamp: int, signature: str) -> str:
+def build_vfile_url(token: str, timestamp: int, signature: str, request=None) -> str:
     """
     Build a complete vfile URL from components.
 
@@ -75,11 +75,19 @@ def build_vfile_url(token: str, timestamp: int, signature: str) -> str:
         token: Random token
         timestamp: Unix timestamp
         signature: HMAC signature
+        request: Optional Django request object to detect scheme
 
     Returns:
         Complete vfile URL
     """
-    base_url = f"http://{settings.SITE_DOMAIN}/vfile"
+    # Detect scheme from request if available
+    if request:
+        scheme = "https" if request.is_secure() else "http"
+    else:
+        # Fallback: check if SITE_DOMAIN suggests https
+        scheme = "https" if not settings.SITE_DOMAIN.startswith("localhost") else "http"
+
+    base_url = f"{scheme}://{settings.SITE_DOMAIN}/vfile"
     params = {
         "token": token,
         "ts": str(timestamp),

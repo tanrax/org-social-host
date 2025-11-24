@@ -35,12 +35,34 @@ class HostedFile(models.Model):
     def __str__(self):
         return f"{self.nickname} ({self.vfile_token[:20]}...)"
 
-    @property
-    def public_url(self):
-        """Return the public URL for this file."""
+    def get_public_url(self, request=None):
+        """
+        Return the public URL for this file.
+
+        Args:
+            request: Optional Django request object to detect scheme
+
+        Returns:
+            Public URL with correct scheme (http/https)
+        """
         from django.conf import settings
 
-        return f"http://{settings.SITE_DOMAIN}/{self.nickname}/social.org"
+        # Detect scheme from request if available
+        if request:
+            scheme = "https" if request.is_secure() else "http"
+        else:
+            # Fallback: check if SITE_DOMAIN suggests https
+            scheme = "https" if not settings.SITE_DOMAIN.startswith("localhost") else "http"
+
+        return f"{scheme}://{settings.SITE_DOMAIN}/{self.nickname}/social.org"
+
+    @property
+    def public_url(self):
+        """
+        Return the public URL for this file (deprecated, use get_public_url).
+        This property uses fallback logic and may not detect https correctly.
+        """
+        return self.get_public_url()
 
     @property
     def is_redirected(self):

@@ -23,6 +23,9 @@ ALLOWED_HOSTS = os.environ.get(
 # Site domain configuration
 SITE_DOMAIN = os.environ.get("SITE_DOMAIN", "localhost:8080")
 
+# Proxy configuration - Trust X-Forwarded-Proto header from nginx
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # Host-specific settings
 MAX_FILE_SIZE = int(os.environ.get("MAX_FILE_SIZE", "5242880"))  # 5MB default
 FILE_TTL_DAYS = int(os.environ.get("FILE_TTL_DAYS", "30"))  # 30 days default
