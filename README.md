@@ -439,6 +439,38 @@ If the account has a redirect configured, returns HTTP 301 with `Location` heade
 
 ## Technical Information
 
+### CORS (Cross-Origin Resource Sharing)
+
+All endpoints are accessible from any origin via CORS. This allows frontend applications to consume the API without restrictions.
+
+**Allowed Origins:** `*` (all origins)
+
+**Allowed Methods:** `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`
+
+**Allowed Headers:** `accept`, `accept-encoding`, `authorization`, `content-type`, `dnt`, `origin`, `user-agent`, `x-csrftoken`, `x-requested-with`
+
+This means you can build web applications, mobile apps, or any frontend that needs to interact with the Org Social Host API without CORS issues.
+
+**Example from JavaScript:**
+
+```javascript
+// Fetch public routes
+fetch('https://host.org-social.org/public-routes')
+  .then(response => response.json())
+  .then(data => console.log(data));
+
+// Create a new account
+fetch('https://host.org-social.org/signup', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ nick: 'my-nickname' })
+})
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
 ### Security
 
 #### vfile Token Format
