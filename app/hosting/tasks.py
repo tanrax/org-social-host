@@ -21,6 +21,11 @@ def cleanup_stale_files():
     Clean up files that haven't been updated within the TTL period.
     Runs daily at midnight UTC.
     """
+    # Check if cleanup is enabled
+    if not settings.ENABLE_CLEANUP:
+        logger.info("Automatic cleanup is disabled. Skipping cleanup task.")
+        return
+
     logger.info("Starting cleanup of stale files...")
 
     # Calculate cutoff date

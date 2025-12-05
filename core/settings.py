@@ -29,6 +29,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # Host-specific settings
 MAX_FILE_SIZE = int(os.environ.get("MAX_FILE_SIZE", "5242880"))  # 5MB default
 FILE_TTL_DAYS = int(os.environ.get("FILE_TTL_DAYS", "30"))  # 30 days default
+ENABLE_CLEANUP = os.environ.get("ENABLE_CLEANUP", "true").lower() == "true"
 STORAGE_PATH = os.environ.get("STORAGE_PATH", str(BASE_DIR / "storage"))
 
 # Application definition

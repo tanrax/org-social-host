@@ -9,12 +9,10 @@ graph LR
     User["👤 User"] -->|1. Signup| Host["🖥️ Org Social Host"]
     Host -->|2. Get vfile & public URL| User
     User -->|3. Upload social.org| Host
-    Host -->|4. Serve publicly| Public["🌐 Public URL"]
-    Followers["👥 Followers"] -->|Read| Public
+    Host -->|"https://example.com/nick/social.org"| Followers["👥 Followers"]
 
     style Host fill:#667eea,stroke:#764ba2,stroke-width:3px,color:#fff,font-weight:bold
     style User fill:#f093fb,stroke:#f5576c,stroke-width:2px,color:#fff
-    style Public fill:#4facfe,stroke:#00f2fe,stroke-width:2px,color:#fff
     style Followers fill:#43e97b,stroke:#38f9d7,stroke-width:2px,color:#fff
 ```
 
@@ -47,6 +45,11 @@ cp .env.example .env
 nano .env
 ```
 
+⚠️ **Personal Use:** If you only plan to use this service for yourself:
+
+- **Disable registration** after creating your account: Set `ENABLE_SIGNUP=false` in your `.env` file and restart the service. Make sure to create your account first before disabling registration.
+- **Disable automatic cleanup**: Set `ENABLE_CLEANUP=false` in your `.env` file to prevent your files from being automatically deleted due to inactivity. This ensures your `social.org` will remain hosted indefinitely.
+
 #### Important Environment Variables
 
 - **`NGINX_PORT`**: The port where the service will be available (default: `8080`)
@@ -60,6 +63,9 @@ nano .env
   - **Important**: Must match the port if not using standard ports (80/443)
 - **`MAX_FILE_SIZE`**: Maximum file size in bytes (default: 5MB = 5242880)
 - **`FILE_TTL_DAYS`**: Days before inactive files are deleted (default: 30)
+- **`ENABLE_CLEANUP`**: Enable automatic cleanup of inactive files (default: `true`)
+  - Set to `false` to disable automatic deletion (recommended for personal use)
+  - When disabled, files will never be automatically deleted
 - **`STORAGE_PATH`**: Path to store social.org files (default: `/app/storage`)
 
 ### 3. Run with Docker Compose
